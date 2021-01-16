@@ -48,7 +48,8 @@ public class Referee extends AbstractReferee {
         try {
             gameManager.setFrameDuration(500);
             gameManager.setMaxTurns(MAX_TURNS);
-            gameManager.setTurnMaxTime(50);
+            gameManager.setTurnMaxTime(Integer.MAX_VALUE / MAX_TURNS);
+            gameManager.setFirstTurnMaxTime(Integer.MAX_VALUE / MAX_TURNS);
 
             game.init(seed);
             sendGlobalInfo();
