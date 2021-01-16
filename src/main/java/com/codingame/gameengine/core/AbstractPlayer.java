@@ -118,6 +118,9 @@ abstract public class AbstractPlayer {
         if (this.timeout) {
             throw new TimeoutException();
         }
+        for (String line : this.outputs) {
+            System.err.println("ACTION " + this.index + " " + line);
+        }
         return this.outputs;
     }
 

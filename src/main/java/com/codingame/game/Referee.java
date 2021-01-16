@@ -76,11 +76,13 @@ public class Referee extends AbstractReferee {
                 player.sendInputLine(line);
             }
         }
+        System.err.println("Sent inputs");
     }
 
     @Override
     public void gameTurn(int turn) {
         if (!gameOverFrame) {
+            System.err.println("Turn " + turn);
             if (game.isSpeedTurn()) {
                 game.performGameSpeedUpdate();
                 maxFrames++;
@@ -93,6 +95,7 @@ public class Referee extends AbstractReferee {
                     for (String line : game.getCurrentFrameInfoFor(player)) {
                         player.sendInputLine(line);
                     }
+                    System.err.println("Sent inputs to player " + player.getNicknameToken());
                     player.execute();
                 }
                 // Get output from players
