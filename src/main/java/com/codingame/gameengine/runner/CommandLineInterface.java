@@ -27,6 +27,8 @@ public class CommandLineInterface {
             options.addOption("h", false, "Print the help")
                     .addOption("p1", true, "Required. Player 1 command line.")
                     .addOption("p2", true, "Required. Player 2 command line.")
+                    .addOption("n1", true, "Player 1 name. Default: Player1")
+                    .addOption("n2", true, "Player 2 name. Default: Player2")
                     .addOption("s", false, "Server mode")
                     .addOption("l", true, "File output for logs")
                     .addOption("d", true, "Referee initial data");
@@ -45,8 +47,15 @@ public class CommandLineInterface {
             gameRunner.setLeagueLevel(3);
 
             //Add players
-            gameRunner.addAgent(cmd.getOptionValue("p1"), "Player1", P1_PICTURE);
-            gameRunner.addAgent(cmd.getOptionValue("p2"), "Player2", P2_PICTURE);
+            String cmd1 = cmd.getOptionValue("p1");
+            String name1 = cmd.getOptionValue("n1", "Player1");
+            String avatar1 = "https://robohash.org/" + name1;
+            gameRunner.addAgent(cmd1, name1, avatar1);
+
+            String cmd2 = cmd.getOptionValue("p2");
+            String name2 = cmd.getOptionValue("n2", "Player2");
+            String avatar2 = "https://robohash.org/" + name2;
+            gameRunner.addAgent(cmd2, name2, avatar2);
 
             if (cmd.hasOption("d")) {
                 String[] parse = cmd.getOptionValue("d").split("=", 0);
