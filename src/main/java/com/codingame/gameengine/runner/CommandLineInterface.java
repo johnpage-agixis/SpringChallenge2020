@@ -29,6 +29,8 @@ public class CommandLineInterface {
                     .addOption("p2", true, "Required. Player 2 command line.")
                     .addOption("n1", true, "Player 1 name. Default: Player1")
                     .addOption("n2", true, "Player 2 name. Default: Player2")
+                    .addOption("a1", true, "Player 1 avatar url. Default: https://robohash.org/playerName")
+                    .addOption("a2", true, "Player 2 avatar url. Default: https://robohash.org/playerName")
                     .addOption("s", false, "Server mode")
                     .addOption("l", true, "File output for logs")
                     .addOption("d", true, "Referee initial data");
@@ -47,15 +49,18 @@ public class CommandLineInterface {
             gameRunner.setLeagueLevel(3);
 
             //Add players
+            Method addAgent = MultiplayerGameRunner.class.getDeclaredMethod("addAgent", Agent.class, String.class, String.class);
+            addAgent.setAccessible(true);
+
             String cmd1 = cmd.getOptionValue("p1");
             String name1 = cmd.getOptionValue("n1", "Player1");
-            String avatar1 = "https://robohash.org/" + name1;
-            gameRunner.addAgent(cmd1, name1, avatar1);
+            String avatar1 = cmd.getOptionValue("a1", "https://robohash.org/" + name1);
+            addAgent.invoke(gameRunner, new CommandLinePlayerAgentModified(cmd1), name1, avatar1);
 
             String cmd2 = cmd.getOptionValue("p2");
             String name2 = cmd.getOptionValue("n2", "Player2");
-            String avatar2 = "https://robohash.org/" + name2;
-            gameRunner.addAgent(cmd2, name2, avatar2);
+            String avatar2 = cmd.getOptionValue("a2", "https://robohash.org/" + name2);
+            addAgent.invoke(gameRunner, new CommandLinePlayerAgentModified(cmd2), name2, avatar2);
 
             if (cmd.hasOption("d")) {
                 String[] parse = cmd.getOptionValue("d").split("=", 0);
@@ -103,7 +108,7 @@ public class CommandLineInterface {
 
             if (players != null) {
                 for (Agent player : players) {
-                    Field getProcess = CommandLinePlayerAgent.class.getDeclaredField("process");
+                    Field getProcess = CommandLinePlayerAgentModified.class.getDeclaredField("process");
                     getProcess.setAccessible(true);
                     Process process = (Process) getProcess.get(player);
 
